@@ -32,10 +32,11 @@ struct dir_monitor_event
     dir_monitor_event()
         : type(null) { }
 
-    dir_monitor_event(const boost::filesystem::path &p, event_type t)
-        : path(p), type(t) { }
+    dir_monitor_event(const boost::filesystem::path &p, const boost::filesystem::path &f, event_type t)
+        : path(p), file(f), type(t) { }
 
     boost::filesystem::path path;
+    boost::filesystem::path file;
     event_type type;
 };
 
@@ -50,7 +51,7 @@ inline std::ostream& operator << (std::ostream& os, dir_monitor_event const& ev)
             case boost::asio::dir_monitor_event::renamed_new_name: return "RENAMED (NEW NAME)";
             case boost::asio::dir_monitor_event::recursive_rescan: return "RESCAN DIR";
             default: return "UKNOWN";
-        } } (ev.type) << " " << ev.path;
+        } } (ev.type) << " " << ev.file << " in " << ev.path;
     return os;
 }
 
